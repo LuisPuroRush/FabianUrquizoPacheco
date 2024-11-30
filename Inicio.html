@@ -8,36 +8,43 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            display: flex;
-            height: 100vh;
             background-color: #f8f9fa;
         }
 
         .container {
             display: flex;
-            width: 100%;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .sidebar {
             background-color: white;
-            flex: 0 0 300px;
-            color: #333;
+            width: 300px;
+            position: fixed;
+            left: -300px;
+            top: 0;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px 0;
-            height: 100vh;
             border-right: 1px solid #e0e0e0;
+            transition: left 0.3s;
+            z-index: 1000;
+        }
+
+        .sidebar.show {
+            left: 0;
         }
 
         .sidebar img {
-            width: 100px;
+            width: 120px;
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .sidebar h1 {
-            font-size: 1rem;
+            font-size: 1.2rem;
             text-align: center;
             margin: 10px 0;
             font-weight: bold;
@@ -48,37 +55,43 @@
             list-style: none;
             padding: 0;
             width: 100%;
-            margin-top: 20px;
         }
 
         .sidebar ul li {
             padding: 15px 20px;
             font-size: 1rem;
             cursor: pointer;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
             transition: background-color 0.3s, color 0.3s;
         }
 
         .sidebar ul li:hover {
             background-color: #f1f1f1;
-            color: #007bff;
         }
 
-        .sidebar ul li:not(:last-child) {
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .group-title {
-            padding: 10px 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            color: #888;
+        .menu-toggle {
+            position: fixed;
+            left: 10px;
+            top: 10px;
+            z-index: 1100;
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
         }
 
         .content {
-            flex: 1;
+            margin: 0 auto;
+            width: 80%;
             padding: 20px;
-            position: relative;
+            margin-left: 300px;
+            transition: margin-left 0.3s;
+        }
+
+        .content.shifted {
+            margin-left: 0;
         }
 
         .profile {
@@ -120,52 +133,108 @@
             background-color: #f8f8f8;
         }
 
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .actions input {
+            padding: 10px;
+            font-size: 1rem;
+            width: 40%;
+        }
+
+        .actions button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            font-size: 1.1rem;
+            text-align: center;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         table th, table td {
+            padding: 15px;
             border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
         }
 
         table th {
             background-color: #007bff;
             color: white;
-            font-weight: bold;
         }
 
-        table tr:nth-child(even) {
-            background-color: #f2f2f2;
+        table tr:hover {
+            background-color: #f1f1f1;
         }
 
-        .title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1100;
+        }
+
+        .modal h2 {
             text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal button {
+            padding: 10px;
+            width: 48%;
+            font-size: 1rem;
+            margin: 5px;
+        }
+
+        .modal .confirm {
+            background: #28a745;
+            color: white;
+            border: none;
+        }
+
+        .modal .cancel {
+            background: #dc3545;
+            color: white;
+            border: none;
         }
     </style>
 </head>
 <body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
     <div class="container">
         <div class="sidebar">
-            <img src="logo.png" alt="Logo"> <!-- Imagen personalizada -->
+            <img src="logo.png" alt="Logo">
             <h1>EMPRESA PERUANA / 20 AÑOS <br> SUMANDO MEJORES REDES</h1>
             <ul>
-                <div class="group">
-                    <li class="group-title">Mantenimiento</li>
-                    <li onclick="showSection('suscripciones')">Suscripciones</li>
-                    <li>Planes</li>
-                    <li>Descuento</li>
-                </div>
-                <div class="group">
-                    <li class="group-title">Soporte</li>
-                    <li>Clientes</li>
-                </div>
+                <li onclick="showSection('suscripciones')">Suscripciones</li>
+                <li>Planes</li>
+                <li>Descuento</li>
                 <li onclick="location.href='index.html';">Cerrar Sesión</li>
             </ul>
         </div>
@@ -178,60 +247,121 @@
             </div>
             <div id="suscripciones" style="display: none;">
                 <div class="title">Revisión de suscripciones</div>
+                <div class="actions">
+                    <input type="text" id="search" placeholder="Buscar por cliente" oninput="searchTable()">
+                    <button onclick="showModal('modify')">Pasar a...</button>
+                    <button onclick="showModal('delete')">Eliminar</button>
+                </div>
                 <table>
                     <thead>
                         <tr>
                             <th>Cliente</th>
                             <th>Plan</th>
-                            <th>Cantidad Meses</th>
+                            <th>Meses</th>
                             <th>Descuento</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Aquí se llenarán los datos dinámicamente -->
+                        <!-- Data rows -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <div id="modal" class="modal">
+        <h2 id="modal-title"></h2>
+        <button class="confirm" id="confirm-btn"></button>
+        <button class="cancel" onclick="closeModal()">Cancelar</button>
+    </div>
 
     <script>
+        const sidebar = document.querySelector('.sidebar');
+        const tableBody = document.getElementById('table-body');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const confirmBtn = document.getElementById('confirm-btn');
+        let selectedRow = null;
         const subscriptions = [
-            { cliente: "Juan Pérez", plan: "Básico", meses: 12, descuento: "10%", estado: "Activo", vencimiento: "2024-12-01 15:00:00" },
-            { cliente: "María López", plan: "Premium", meses: 6, descuento: "15%", estado: "Activo", vencimiento: "2024-11-30 10:00:00" },
+            { cliente: "Juan Pérez", plan: "Básico", meses: 12, descuento: "10%", estado: "Activo" },
+            { cliente: "María López", plan: "Premium", meses: 6, descuento: "15%", estado: "Inactivo" },
         ];
 
-        function showSection(sectionId) {
-            document.getElementById("suscripciones").style.display = sectionId === "suscripciones" ? "block" : "none";
-            loadTable();
-        }
-
-        function loadTable() {
-            const tbody = document.getElementById("table-body");
-            tbody.innerHTML = "";
-            const now = new Date();
-
-            subscriptions.forEach((sub) => {
-                const expiration = new Date(sub.vencimiento);
-                sub.estado = expiration < now ? "Inactivo" : "Activo";
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${sub.cliente}</td>
-                        <td>${sub.plan}</td>
-                        <td>${sub.meses}</td>
-                        <td>${sub.descuento}</td>
-                        <td>${sub.estado}</td>
-                    </tr>
-                `;
-            });
+        function toggleSidebar() {
+            sidebar.classList.toggle('show');
+            document.querySelector('.content').classList.toggle('shifted');
         }
 
         function toggleProfileMenu() {
             const menu = document.querySelector('.profile-menu');
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
+
+        function showSection(sectionId) {
+            document.getElementById("suscripciones").style.display = "none";
+            if (sectionId === "suscripciones") {
+                document.getElementById(sectionId).style.display = "block";
+                loadTable();
+            }
+        }
+
+        function loadTable() {
+            tableBody.innerHTML = '';
+            subscriptions.forEach((sub, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${sub.cliente}</td>
+                    <td>${sub.plan}</td>
+                    <td>${sub.meses}</td>
+                    <td>${sub.descuento}</td>
+                    <td>${sub.estado}</td>
+                `;
+                row.onclick = () => selectRow(index);
+                tableBody.appendChild(row);
+            });
+        }
+
+        function selectRow(index) {
+            selectedRow = subscriptions[index];
+            Array.from(tableBody.children).forEach(row => row.classList.remove('selected'));
+            tableBody.children[index].classList.add('selected');
+        }
+
+        function showModal(action) {
+            if (!selectedRow) return alert("Selecciona una fila primero");
+            modal.style.display = 'block';
+            if (action === 'modify') {
+                modalTitle.innerText = `Modificar estado de ${selectedRow.cliente}`;
+                confirmBtn.innerText = selectedRow.estado === "Activo" ? "Pasar a Inactivo" : "Pasar a Activo";
+                confirmBtn.onclick = () => {
+                    selectedRow.estado = selectedRow.estado === "Activo" ? "Inactivo" : "Activo";
+                    closeModal();
+                    loadTable();
+                };
+            } else if (action === 'delete') {
+                modalTitle.innerText = `Eliminar suscripción de ${selectedRow.cliente}`;
+                confirmBtn.innerText = "Cancelar suscripción";
+                confirmBtn.onclick = () => {
+                    selectedRow.estado = "Cancelado";
+                    closeModal();
+                    loadTable();
+                };
+            }
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function searchTable() {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            Array.from(tableBody.children).forEach(row => {
+                const cliente = row.children[0].innerText.toLowerCase();
+                row.style.display = cliente.includes(searchValue) ? '' : 'none';
+            });
+        }
+
+        loadTable();
     </script>
 </body>
 </html>
