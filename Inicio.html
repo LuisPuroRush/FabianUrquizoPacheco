@@ -9,42 +9,27 @@
             margin: 0;
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
-        }
-
-        .container {
             display: flex;
-            height: 100vh;
-            overflow: hidden;
         }
 
         .sidebar {
             background-color: white;
-            width: 300px;
-            position: fixed;
-            left: -300px;
-            top: 0;
+            width: 250px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 0;
+            padding: 10px 0;
             border-right: 1px solid #e0e0e0;
-            transition: left 0.3s;
-            z-index: 1000;
-        }
-
-        .sidebar.show {
-            left: 0;
         }
 
         .sidebar img {
-            width: 120px;
-            height: auto;
-            margin-bottom: 20px;
+            width: 100px;
+            margin-bottom: 15px;
         }
 
-        .sidebar h1 {
-            font-size: 1.2rem;
+        .sidebar h1, .sidebar h2 {
+            font-size: 1rem;
             text-align: center;
             margin: 10px 0;
             font-weight: bold;
@@ -54,12 +39,12 @@
         .sidebar ul {
             list-style: none;
             padding: 0;
-            width: 100%;
+            width: 90%;
         }
 
         .sidebar ul li {
-            padding: 15px 20px;
-            font-size: 1rem;
+            padding: 10px;
+            font-size: 0.9rem;
             cursor: pointer;
             text-align: center;
             border-bottom: 1px solid #e0e0e0;
@@ -71,70 +56,14 @@
             background-color: #f1f1f1;
         }
 
-        .menu-toggle {
-            position: fixed;
-            left: 10px;
-            top: 10px;
-            z-index: 1100;
-            cursor: pointer;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-        }
-
         .content {
-            margin: 0 auto;
-            width: 80%;
+            flex: 1;
             padding: 20px;
-            margin-left: 300px;
-            transition: margin-left 0.3s;
-        }
-
-        .content.shifted {
-            margin-left: 0;
-        }
-
-        .profile {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .profile img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #333;
-        }
-
-        .profile-menu {
-            display: none;
-            position: absolute;
-            top: 70px;
-            right: 0;
-            background: white;
-            border: 1px solid #ccc;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-
-        .profile-menu a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #333;
-            font-size: 1rem;
-        }
-
-        .profile-menu a:hover {
-            background-color: #f8f8f8;
+            overflow: auto;
         }
 
         .title {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             text-align: center;
             margin-bottom: 20px;
@@ -142,9 +71,9 @@
 
         .actions {
             display: flex;
-            gap: 20px;
+            gap: 10px;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .actions input {
@@ -161,19 +90,24 @@
             color: white;
             border: none;
             border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .actions button:hover {
+            background-color: #0056b3;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-align: center;
             margin: 0 auto;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         table th, table td {
-            padding: 15px;
+            padding: 10px;
             border: 1px solid #ddd;
         }
 
@@ -184,184 +118,139 @@
 
         table tr:hover {
             background-color: #f1f1f1;
+            cursor: pointer;
         }
 
-        .modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border: 1px solid #ccc;
-            padding: 20px;
-            width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1100;
-        }
-
-        .modal h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .modal button {
-            padding: 10px;
-            width: 48%;
-            font-size: 1rem;
-            margin: 5px;
-        }
-
-        .modal .confirm {
-            background: #28a745;
+        .selected {
+            background-color: #007bff !important;
             color: white;
-            border: none;
-        }
-
-        .modal .cancel {
-            background: #dc3545;
-            color: white;
-            border: none;
         }
     </style>
+    <!-- Incluyendo Print.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.css">
 </head>
 <body>
-    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-    <div class="container">
-        <div class="sidebar">
-            <img src="logo.png" alt="Logo">
-            <h1>EMPRESA PERUANA / 20 AÑOS <br> SUMANDO MEJORES REDES</h1>
-            <ul>
-                <li onclick="showSection('suscripciones')">Suscripciones</li>
-                <li>Planes</li>
-                <li>Descuento</li>
-                <li onclick="location.href='index.html';">Cerrar Sesión</li>
-            </ul>
-        </div>
-        <div class="content">
-            <div class="profile" onclick="toggleProfileMenu()">
-                <img src="https://via.placeholder.com/50" alt="User Profile">
-                <div class="profile-menu">
-                    <a href="#">Ajustes</a>
-                </div>
-            </div>
-            <div id="suscripciones" style="display: none;">
-                <div class="title">Revisión de suscripciones</div>
-                <div class="actions">
-                    <input type="text" id="search" placeholder="Buscar por cliente" oninput="searchTable()">
-                    <button onclick="showModal('modify')">Pasar a...</button>
-                    <button onclick="showModal('delete')">Eliminar</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Plan</th>
-                            <th>Meses</th>
-                            <th>Descuento</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <!-- Data rows -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="sidebar">
+        <img src="logo.png" alt="Logo">
+        <h1>EMPRESA PERUANA / 20 AÑOS</h1>
+        <h2>Mantenimiento</h2>
+        <ul>
+            <li onclick="showSection('suscripciones')">Suscripciones</li>
+            <li onclick="showSection('planes')">Planes</li>
+            <li onclick="showSection('descuentos')">Descuentos</li>
+        </ul>
+        <h2>Soporte</h2>
+        <ul>
+            <li onclick="showSection('cliente')">Cliente</li>
+        </ul>
+        <ul>
+            <li onclick="location.href='index.html';">Cerrar Sesión</li>
+        </ul>
     </div>
-    <div id="modal" class="modal">
-        <h2 id="modal-title"></h2>
-        <button class="confirm" id="confirm-btn"></button>
-        <button class="cancel" onclick="closeModal()">Cancelar</button>
+    <div class="content">
+        <div id="bienvenida">
+            <div class="title">Bienvenido al Dashboard</div>
+            <p style="text-align: center;">Selecciona una opción del menú para comenzar.</p>
+        </div>
+        <div id="suscripciones" style="display: none;">
+            <div class="title">Revisión de suscripciones</div>
+            <div class="actions">
+                <input type="text" id="search" placeholder="Buscar por cliente" oninput="searchTable()">
+                <button onclick="modifySubscription()">Modificar</button>
+                <button onclick="deleteSubscription()">Eliminar</button>
+                <button onclick="printTable()">Imprimir</button>
+            </div>
+            <table id="subscriptionTable">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Plan</th>
+                        <th>Meses</th>
+                        <th>Descuento</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr onclick="selectRow(this)">
+                        <td>Juan Pérez</td>
+                        <td>Básico</td>
+                        <td>12</td>
+                        <td>10%</td>
+                        <td>Activo</td>
+                    </tr>
+                    <tr onclick="selectRow(this)">
+                        <td>María López</td>
+                        <td>Premium</td>
+                        <td>6</td>
+                        <td>15%</td>
+                        <td>Inactivo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        const sidebar = document.querySelector('.sidebar');
-        const tableBody = document.getElementById('table-body');
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const confirmBtn = document.getElementById('confirm-btn');
         let selectedRow = null;
-        const subscriptions = [
-            { cliente: "Juan Pérez", plan: "Básico", meses: 12, descuento: "10%", estado: "Activo" },
-            { cliente: "María López", plan: "Premium", meses: 6, descuento: "15%", estado: "Inactivo" },
-        ];
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('show');
-            document.querySelector('.content').classList.toggle('shifted');
-        }
-
-        function toggleProfileMenu() {
-            const menu = document.querySelector('.profile-menu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        }
 
         function showSection(sectionId) {
-            document.getElementById("suscripciones").style.display = "none";
-            if (sectionId === "suscripciones") {
-                document.getElementById(sectionId).style.display = "block";
-                loadTable();
+            document.querySelectorAll('.content > div').forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function selectRow(row) {
+            if (selectedRow) selectedRow.classList.remove('selected');
+            selectedRow = row;
+            row.classList.add('selected');
+        }
+
+        function modifySubscription() {
+            if (!selectedRow) {
+                alert('Selecciona una fila primero.');
+                return;
+            }
+
+            const estadoCell = selectedRow.querySelector('td:last-child');
+            const estadoActual = estadoCell.textContent.trim();
+            const nuevoEstado = estadoActual === 'Activo' ? 'Inactivo' : 'Activo';
+            if (confirm(`¿Deseas cambiar el estado a ${nuevoEstado}?`)) {
+                estadoCell.textContent = nuevoEstado;
+                alert(`El estado se ha cambiado a ${nuevoEstado}.`);
             }
         }
 
-        function loadTable() {
-            tableBody.innerHTML = '';
-            subscriptions.forEach((sub, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${sub.cliente}</td>
-                    <td>${sub.plan}</td>
-                    <td>${sub.meses}</td>
-                    <td>${sub.descuento}</td>
-                    <td>${sub.estado}</td>
-                `;
-                row.onclick = () => selectRow(index);
-                tableBody.appendChild(row);
-            });
-        }
+        function deleteSubscription() {
+            if (!selectedRow) {
+                alert('Selecciona una fila primero.');
+                return;
+            }
 
-        function selectRow(index) {
-            selectedRow = subscriptions[index];
-            Array.from(tableBody.children).forEach(row => row.classList.remove('selected'));
-            tableBody.children[index].classList.add('selected');
-        }
+            const estadoCell = selectedRow.querySelector('td:last-child');
+            if (estadoCell.textContent.trim() === 'Cancelado') {
+                alert('Esta suscripción ya está cancelada.');
+                return;
+            }
 
-        function showModal(action) {
-            if (!selectedRow) return alert("Selecciona una fila primero");
-            modal.style.display = 'block';
-            if (action === 'modify') {
-                modalTitle.innerText = `Modificar estado de ${selectedRow.cliente}`;
-                confirmBtn.innerText = selectedRow.estado === "Activo" ? "Pasar a Inactivo" : "Pasar a Activo";
-                confirmBtn.onclick = () => {
-                    selectedRow.estado = selectedRow.estado === "Activo" ? "Inactivo" : "Activo";
-                    closeModal();
-                    loadTable();
-                };
-            } else if (action === 'delete') {
-                modalTitle.innerText = `Eliminar suscripción de ${selectedRow.cliente}`;
-                confirmBtn.innerText = "Cancelar suscripción";
-                confirmBtn.onclick = () => {
-                    selectedRow.estado = "Cancelado";
-                    closeModal();
-                    loadTable();
-                };
+            if (confirm('¿Estás seguro de que deseas cancelar esta suscripción?')) {
+                estadoCell.textContent = 'Cancelado';
+                alert('La suscripción ha sido cancelada.');
             }
         }
 
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        function searchTable() {
-            const searchValue = document.getElementById('search').value.toLowerCase();
-            Array.from(tableBody.children).forEach(row => {
-                const cliente = row.children[0].innerText.toLowerCase();
-                row.style.display = cliente.includes(searchValue) ? '' : 'none';
+        function printTable() {
+            printJS({
+                printable: 'subscriptionTable',
+                type: 'html',
+                style: `
+                    table { width: 100%; border-collapse: collapse; font-size: 1rem; text-align: center; }
+                    th, td { padding: 10px; border: 1px solid #ddd; }
+                    th { background-color: #007bff; color: white; }
+                `
             });
         }
 
-        loadTable();
+        showSection('bienvenida');
     </script>
 </body>
 </html>
