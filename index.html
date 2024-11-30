@@ -124,11 +124,6 @@
             background-color: #d7e9f7 !important;
             color: #333;
         }
-
-        .countdown {
-            font-size: 0.9rem;
-            color: #ff5733;
-        }
     </style>
     <!-- Incluyendo Print.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.js"></script>
@@ -163,7 +158,6 @@
                 <button onclick="modifySubscription()">Modificar</button>
                 <button onclick="deleteSubscription()">Eliminar</button>
                 <button onclick="printTable()">Imprimir</button>
-                <button onclick="filterCancelled()">Ver Cancelados</button>
             </div>
             <table id="subscriptionTable">
                 <thead>
@@ -173,9 +167,6 @@
                         <th>Meses</th>
                         <th>Descuento</th>
                         <th>Estado</th>
-                        <th>Fecha Inicio</th>
-                        <th>Fecha Fin</th>
-                        <th>Cronómetro</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -185,9 +176,6 @@
                         <td>12</td>
                         <td>10%</td>
                         <td>Activo</td>
-                        <td>2024-01-01</td>
-                        <td>2024-12-31</td>
-                        <td class="countdown" data-end-date="2024-12-31"></td>
                     </tr>
                     <tr onclick="selectRow(this)">
                         <td>María López</td>
@@ -195,9 +183,6 @@
                         <td>6</td>
                         <td>15%</td>
                         <td>Inactivo</td>
-                        <td>2024-06-01</td>
-                        <td>2024-12-01</td>
-                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -224,7 +209,7 @@
                 return;
             }
 
-            const estadoCell = selectedRow.querySelector('td:nth-child(5)');
+            const estadoCell = selectedRow.querySelector('td:last-child');
             const estadoActual = estadoCell.textContent.trim();
             const nuevoEstado = estadoActual === 'Activo' ? 'Inactivo' : 'Activo';
             if (confirm(`¿Deseas cambiar el estado a ${nuevoEstado}?`)) {
@@ -239,7 +224,7 @@
                 return;
             }
 
-            const estadoCell = selectedRow.querySelector('td:nth-child(5)');
+            const estadoCell = selectedRow.querySelector('td:last-child');
             if (estadoCell.textContent.trim() === 'Cancelado') {
                 alert('Esta suscripción ya está cancelada.');
                 return;
@@ -263,45 +248,7 @@
             });
         }
 
-        function filterCancelled() {
-            const rows = document.querySelectorAll('#table-body tr');
-            rows.forEach(row => {
-                const estado = row.querySelector('td:nth-child(5)').textContent.trim();
-                row.style.display = (estado === 'Cancelado') ? '' : 'none';
-            });
-        }
-
-        function startCountdowns() {
-            const countdownCells = document.querySelectorAll('.countdown');
-            countdownCells.forEach(cell => {
-                const endDate = cell.dataset.endDate;
-                if (!endDate) return;
-
-                function updateCountdown() {
-                    const now = new Date();
-                    const targetDate = new Date(endDate);
-                    const remainingTime = targetDate - now;
-
-                    if (remainingTime <= 0) {
-                        cell.textContent = 'Tiempo terminado';
-                        const estadoCell = cell.parentElement.querySelector('td:nth-child(5)');
-                        estadoCell.textContent = 'Inactivo';
-                        clearInterval(interval);
-                    } else {
-                        const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-                        const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                        const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-                        cell.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-                    }
-                }
-
-                updateCountdown();
-                const interval = setInterval(updateCountdown, 1000);
-            });
-        }
-
-        startCountdowns();
+        showSection('bienvenida');
     </script>
 </body>
 </html>
