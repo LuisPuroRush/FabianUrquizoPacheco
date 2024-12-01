@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Internet</title>
+    <link rel="shortcut icon" href="logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.css">
     <style>
         body {
@@ -198,6 +199,46 @@ table tr.selected {
 #planes {
     display: none;
 }
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-buttons {
+    margin-top: 15px;
+}
+
+.popup-buttons button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.popup-buttons button:hover {
+    background-color: #45a049;
+}
 
     </style>
 </head>
@@ -224,16 +265,36 @@ table tr.selected {
             <div class="title">Bienvenido al Dashboard</div>
             <p style="text-align: center;">Selecciona una opción del menú para comenzar.</p>
         </div>
-
-        <!-- Suscripciones -->
         <div id="suscripciones" style="display: none;">
             <div class="title">Revisión de Suscripciones</div>
             <div class="search-bar">
                 <input type="text" id="searchBox" placeholder="Buscar por nombre..." oninput="searchByName()">
             </div>
             <div class="actions">
+         <button onclick="deleteSubscription()">Eliminar</button>
+                <button onclick="modifySubscription()">Modificar</button>
                 <button onclick="printTable()">Imprimir</button>
                 <button onclick="toggleCancelados()">Mostrar Cancelados</button>
+            </div>
+            <div id="modifyPopup" class="popup" style="display: none;">
+                <div class="popup-content">
+                    <p id="modifyText">¿Quieres poner inactivo a <span id="clientName"></span>?</p>
+                    <div class="popup-buttons">
+                        <button onclick="modifySubscriptionAction('inactive')">Aceptar</button>
+                        <button onclick="closePopup()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Eliminar Contenedor (popup) -->
+            <div id="deletePopup" class="popup" style="display: none;">
+                <div class="popup-content">
+                    <p id="deleteText">¿Quieres poner como cancelado a <span id="deleteClientName"></span>?</p>
+                    <div class="popup-buttons">
+                        <button onclick="deleteSubscriptionAction()">Aceptar</button>
+                        <button onclick="closePopup()">Cancelar</button>
+                    </div>
+                </div>
             </div>
             <table id="subscriptionTable">
                 <thead>
@@ -304,118 +365,135 @@ table tr.selected {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.js"></script>
     <script>
-        // Función para cambiar de sección
-function showSection(section) {
-    const sections = document.querySelectorAll('.content > div');
-    sections.forEach(sec => {
-        sec.style.display = 'none';
-    });
+        let selectedClient = null;
+        let showingCancelados = false; // Control para alternar entre cancelados y lista principal
 
-    const sectionToShow = document.getElementById(section);
-    if (sectionToShow) {
-        sectionToShow.style.display = 'block';
-    }
-}
-
-// Función para buscar por nombre de cliente
-function searchByName() {
-    const input = document.getElementById("searchBox");
-    const filter = input.value.toLowerCase();
-    const rows = document.querySelectorAll("#subscriptionTable tbody tr");
-
-    rows.forEach(row => {
-        const name = row.cells[0].textContent.toLowerCase();
-        if (name.indexOf(filter) > -1) {
-            row.style.display = "";
-        } else {
-            row.style.display = "none";
-        }
-    });
-}
-
-// Función para calcular el tiempo restante
-function calculateRemainingTime() {
-    const rows = document.querySelectorAll('#subscriptionTable tbody tr');
-    rows.forEach(row => {
-        const endDate = row.querySelector('.remaining-time').getAttribute('data-end-date');
-        const end = new Date(endDate);
-        const now = new Date();
-        const diffTime = end - now;
-        const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        row.querySelector('.remaining-time').textContent = `${daysRemaining} días restantes`;
-    });
-}
-
-// Función para seleccionar una fila de la tabla
-function selectRow(row) {
-    const rows = document.querySelectorAll("#subscriptionTable tbody tr");
-    rows.forEach(r => r.classList.remove("selected"));
-    row.classList.add("selected");
-}
-
-// Función para imprimir la tabla
-function printTable() {
-    printJS({
-        printable: 'subscriptionTable',
-        type: 'html',
-        targetStyles: ['*']
-    });
-}
-
-// Función para alternar la visibilidad de los planes cancelados
-function toggleCancelados() {
-    const rows = document.querySelectorAll('#subscriptionTable tbody tr');
-    rows.forEach(row => {
-        const status = row.cells[4].textContent;
-        if (status === 'Cancelado') {
-            if (row.style.display === 'none') {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
+        function showSection(section) {
+            const sections = document.querySelectorAll('.content > div');
+            sections.forEach(sec => sec.style.display = 'none');
+            const sectionToShow = document.getElementById(section);
+            if (sectionToShow) {
+                sectionToShow.style.display = 'block';
             }
         }
-    });
-}
 
-// Función para agregar un nuevo plan
-function addPlan() {
-    const planContainer = document.getElementById("plansContainer");
-    const newPlan = document.createElement('div');
-    newPlan.classList.add('plan');
-    newPlan.innerHTML = `
-        <h3>Nuevo Plan</h3>
-        <p>Velocidad: 0 Mbps</p>
-        <p>Precio: S/ 0.00</p>
-        <button onclick="editPlan(this)">Editar</button>
-    `;
-    planContainer.appendChild(newPlan);
-}
+        function searchByName() {
+            const input = document.getElementById("searchBox").value.toLowerCase();
+            const rows = document.querySelectorAll("#subscriptionTable tbody tr");
 
-// Función para editar un plan
-function editPlan(button) {
-    const plan = button.closest('.plan');
-    const planName = plan.querySelector('h3');
-    const planSpeed = plan.querySelector('p:first-of-type');
-    const planPrice = plan.querySelector('p:last-of-type');
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                row.style.display = name.includes(input) ? "" : "none";
+            });
+        }
 
-    const newName = prompt("Nuevo nombre para el plan:", planName.textContent);
-    const newSpeed = prompt("Nueva velocidad (Mbps):", planSpeed.textContent.replace('Velocidad: ', '').replace(' Mbps', ''));
-    const newPrice = prompt("Nuevo precio:", planPrice.textContent.replace('Precio: S/ ', '').replace('00', ''));
+        function calculateRemainingTime() {
+            const rows = document.querySelectorAll('#subscriptionTable tbody tr');
+            rows.forEach(row => {
+                const endDate = row.querySelector('.remaining-time')?.getAttribute('data-end-date');
+                if (!endDate) return;
+                const end = new Date(endDate);
+                const now = new Date();
+                const daysRemaining = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+                row.querySelector('.remaining-time').textContent = `${daysRemaining} días restantes`;
+            });
+        }
 
-    if (newName && newSpeed && newPrice) {
-        planName.textContent = newName;
-        planSpeed.textContent = `Velocidad: ${newSpeed} Mbps`;
-        planPrice.textContent = `Precio: S/ ${newPrice}.00`;
-    }
-}
+        function selectRow(row) {
+            document.querySelectorAll("#subscriptionTable tbody tr").forEach(r => r.classList.remove("selected"));
+            row.classList.add("selected");
+            selectedClient = row;
+        }
 
-// Inicialización de funciones después de cargar la página
-document.addEventListener('DOMContentLoaded', function() {
-    showSection('bienvenida'); // Mostrar bienvenida al inicio
-    calculateRemainingTime(); // Calcular tiempo restante al cargar la página
-});
+        function printTable() {
+            printJS({
+                printable: 'subscriptionTable',
+                type: 'html',
+                targetStyles: ['*']
+            });
+        }
 
+        function toggleCancelados() {
+            const rows = document.querySelectorAll('#subscriptionTable tbody tr');
+            const button = document.getElementById('toggleCancelButton');
+            showingCancelados = !showingCancelados;
+
+            rows.forEach(row => {
+                const status = row.cells[4].textContent.trim();
+                row.style.display = showingCancelados
+                    ? (status === 'Cancelado' ? '' : 'none')
+                    : (status !== 'Cancelado' ? '' : 'none');
+            });
+
+            button.textContent = showingCancelados ? "Regresar" : "Ver Cancelados";
+        }
+
+        function addPlan() {
+            const planContainer = document.getElementById("plansContainer");
+            const newPlan = document.createElement('div');
+            newPlan.classList.add('plan');
+            newPlan.innerHTML = `
+                <h3>Nuevo Plan</h3>
+                <p>Velocidad: 0 Mbps</p>
+                <p>Precio: S/ 0.00</p>
+                <button onclick="editPlan(this)">Editar</button>
+            `;
+            planContainer.appendChild(newPlan);
+        }
+
+        function editPlan(button) {
+            const plan = button.closest('.plan');
+            const planName = plan.querySelector('h3');
+            const planSpeed = plan.querySelector('p:first-of-type');
+            const planPrice = plan.querySelector('p:nth-of-type(2)');
+
+            const newName = prompt("Editar nombre del plan:", planName.textContent);
+            const newSpeed = prompt("Editar velocidad del plan (Mbps):", planSpeed.textContent.split(': ')[1]);
+            const newPrice = prompt("Editar precio del plan (S/):", planPrice.textContent.split(': ')[1]);
+
+            if (newName) planName.textContent = newName;
+            if (newSpeed) planSpeed.textContent = `Velocidad: ${newSpeed} Mbps`;
+            if (newPrice) planPrice.textContent = `Precio: S/ ${newPrice}`;
+        }
+
+        function modifySubscription() {
+            if (!selectedClient) return;
+
+            const clientName = selectedClient.cells[0].textContent;
+            const currentStatusCell = selectedClient.cells[4];
+            const currentStatus = currentStatusCell.textContent.trim();
+
+            if (currentStatus === 'Activo') {
+                currentStatusCell.textContent = 'Inactivo';
+                alert(`${clientName} ahora está inactivo.`);
+            } else if (currentStatus === 'Inactivo') {
+                currentStatusCell.textContent = 'Activo';
+                alert(`${clientName} ahora está activo.`);
+            } else if (currentStatus === 'Cancelado') {
+                currentStatusCell.textContent = 'Activo';
+                alert(`${clientName} ha sido reactivado. Recuerda que la reconexión tiene un costo.`);
+            }
+        }
+
+        function deleteSubscription() {
+            if (!selectedClient) return;
+
+            const clientName = selectedClient.cells[0].textContent;
+            const currentStatusCell = selectedClient.cells[4];
+            const currentStatus = currentStatusCell.textContent.trim();
+
+            if (currentStatus === 'Cancelado') {
+                alert(`${clientName} ya está cancelado.`);
+                return;
+            }
+
+            if (confirm(`¿Estás seguro de que quieres cancelar a ${clientName}?`)) {
+                currentStatusCell.textContent = 'Cancelado';
+                alert(`${clientName} ha sido cancelado.`);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', calculateRemainingTime);
     </script>
 </body>
 </html>
