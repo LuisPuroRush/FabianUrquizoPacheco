@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="logo.png" />
   <title>Login - MINTER</title>
   <style>
-    /* General styles */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -198,8 +198,6 @@
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-
-      // Validación
       if (username === 'admin' && password === '123456') {
         document.body.style.animation = "fade-out 1s forwards";
         setTimeout(() => {

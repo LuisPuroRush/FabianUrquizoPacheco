@@ -1,499 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Internet</title>
-    <link rel="shortcut icon" href="logo.png" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.css">
+    <title>Menú Lateral</title>
     <style>
         body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    display: flex;
-}
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+        }
 
-.sidebar {
-    background-color: white;
-    width: 250px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px 0;
-    border-right: 1px solid #e0e0e0;
-}
+        .menu-lateral {
+            width: 250px;
+            height: 100vh;
+            background-color: #fff;
+            border-right: 2px solid #ddd;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.15);
+            animation: slideIn 1s ease-in-out;
+        }
 
-.sidebar img {
-    width: 100px;
-    margin-bottom: 15px;
-}
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
 
-.sidebar h1, .sidebar h2 {
-    font-size: 1rem;
-    text-align: center;
-    margin: 10px 0;
-    font-weight: bold;
-    color: #555;
-}
+        .menu-lateral img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            align-self: center;
+            margin-bottom: 10px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
 
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    width: 90%;
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
-.sidebar ul li {
-    padding: 10px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-    color: #333;
-    transition: background-color 0.3s, color 0.3s;
-}
+        .menu-lateral h1 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            align-self: center;
+            margin: 10px 0;
+        }
 
-.sidebar ul li:hover {
-    background-color: #f1f1f1;
-}
+        .menu-lateral .bienvenidos {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            align-self: center;
+            margin: 20px 0;
+        }
 
-.content {
-    flex: 1;
-    padding: 20px;
-    overflow: auto;
-}
+        .menu-lateral .linea {
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            margin: 10px 0;
+        }
 
-.title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-}
+        .menu-lateral h2 {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            color: #666;
+        }
 
-.actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 15px;
-}
+        .menu-lateral a {
+            width: 100%;
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+            padding: 12px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+        }
 
-.actions button {
-    padding: 12px 25px;
-    font-size: 1rem;
-    cursor: pointer;
-    border: none;
-    border-radius: 25px;
-    background: linear-gradient(90deg, #6a11cb, #2575fc);
-    color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
-}
+        .menu-lateral a:hover {
+            background-color: #007bff;
+            color: #fff;
+            transform: scale(1.05);
+        }
 
-.actions button:hover {
-    background-color: #2c79e3;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
+        .menu-lateral a.cerrar-sesion {
+            color: #d9534f;
+            font-weight: bold;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-    text-align: center;
-    margin: 0 auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-table th, table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-}
-
-table th {
-    background-color: #5f72be;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-table tr:hover {
-    background-color: #f5f7fa;
-    cursor: pointer;
-}
-
-table tr.selected {
-    background-color: #d7e9f7 !important;
-    color: #333;
-}
-
-.search-bar {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.search-bar input {
-    padding: 10px;
-    font-size: 1rem;
-    width: 60%;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.plans-container {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.plan {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    text-align: center;
-    width: 250px;
-}
-
-.plan h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-.plan p {
-    font-size: 1rem;
-    margin: 5px 0;
-}
-
-.plan button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    border: none;
-    background: #4caf50;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.plan button:hover {
-    background: #45a049;
-}
-
-.remaining-time {
-    font-weight: bold;
-    color: #ff5722;
-}
-
-#bienvenida p {
-    font-size: 1rem;
-    color: #333;
-}
-
-#suscripciones {
-    display: none;
-}
-
-#planes {
-    display: none;
-}
-.popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-}
-
-.popup-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 300px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.popup-buttons {
-    margin-top: 15px;
-}
-
-.popup-buttons button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    background-color: #4caf50;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.popup-buttons button:hover {
-    background-color: #45a049;
-}
-
+        .menu-lateral a.cerrar-sesion:hover {
+            background-color: #ffecec;
+            color: #b52b27;
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
+    <div class="menu-lateral">
         <img src="logo.png" alt="Logo">
+        <div class="bienvenidos">Bienvenidos</div>
+        <div class="linea"></div>
         <h1>EMPRESA PERUANA / 20 AÑOS</h1>
+
         <h2>Mantenimiento</h2>
-        <ul>
-            <li onclick="showSection('suscripciones')">Suscripciones</li>
-            <li onclick="showSection('planes')">Planes</li>
-            <li onclick="showSection('descuentos')">Descuentos</li>
-        </ul>
+        <a href="Suscripciones.html">Suscripciones</a>
+        <a href="Planes.html">Planes</a>
+        <a href="Descuentos.html">Descuentos</a>
+
         <h2>Soporte</h2>
-        <ul>
-            <li onclick="showSection('cliente')">Cliente</li>
-        </ul>
-        <ul>
-            <li onclick="location.href='index.html';">Cerrar Sesión</li>
-        </ul>
+        <a href="Cliente.html">Cliente</a>
+
+        <a href="index.html" class="cerrar-sesion">Cerrar Sesión</a>
     </div>
-    <div class="content">
-        <div id="bienvenida">
-            <div class="title">Bienvenido al Dashboard</div>
-            <p style="text-align: center;">Selecciona una opción del menú para comenzar.</p>
-        </div>
-        <div id="suscripciones" style="display: none;">
-            <div class="title">Revisión de Suscripciones</div>
-            <div class="search-bar">
-                <input type="text" id="searchBox" placeholder="Buscar por nombre..." oninput="searchByName()">
-            </div>
-            <div class="actions">
-         <button onclick="deleteSubscription()">Eliminar</button>
-                <button onclick="modifySubscription()">Modificar</button>
-                <button onclick="printTable()">Imprimir</button>
-                <button onclick="toggleCancelados()">Mostrar Cancelados</button>
-            </div>
-            <div id="modifyPopup" class="popup" style="display: none;">
-                <div class="popup-content">
-                    <p id="modifyText">¿Quieres poner inactivo a <span id="clientName"></span>?</p>
-                    <div class="popup-buttons">
-                        <button onclick="modifySubscriptionAction('inactive')">Aceptar</button>
-                        <button onclick="closePopup()">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Eliminar Contenedor (popup) -->
-            <div id="deletePopup" class="popup" style="display: none;">
-                <div class="popup-content">
-                    <p id="deleteText">¿Quieres poner como cancelado a <span id="deleteClientName"></span>?</p>
-                    <div class="popup-buttons">
-                        <button onclick="deleteSubscriptionAction()">Aceptar</button>
-                        <button onclick="closePopup()">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-            <table id="subscriptionTable">
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Plan</th>
-                        <th>Meses</th>
-                        <th>Descuento</th>
-                        <th>Estado</th>
-                        <th>Fecha Inicio</th>
-                        <th>Fecha Fin</th>
-                        <th>Tiempo Restante</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr onclick="selectRow(this)">
-                        <td>Juan Pérez</td>
-                        <td>Básico</td>
-                        <td>12</td>
-                        <td>10%</td>
-                        <td>Activo</td>
-                        <td>2024-01-01</td>
-                        <td>2024-12-31</td>
-                        <td class="remaining-time" data-end-date="2024-12-31"></td>
-                    </tr>
-                    <tr onclick="selectRow(this)">
-                        <td>María López</td>
-                        <td>Premium</td>
-                        <td>6</td>
-                        <td>15%</td>
-                        <td>Cancelado</td>
-                        <td>2024-06-01</td>
-                        <td>2024-12-01</td>
-                        <td class="remaining-time" data-end-date="2024-12-01"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Planes -->
-        <div id="planes" style="display: none;">
-            <div class="title">Gestión de Planes</div>
-            <div id="plansContainer" class="plans-container">
-                <div class="plan">
-                    <h3>Plan Básico</h3>
-                    <p>Velocidad: 50 Mbps</p>
-                    <p>Precio: S/ 50.00</p>
-                    <button onclick="editPlan(this)">Editar</button>
-                </div>
-                <div class="plan">
-                    <h3>Plan Estándar</h3>
-                    <p>Velocidad: 100 Mbps</p>
-                    <p>Precio: S/ 80.00</p>
-                    <button onclick="editPlan(this)">Editar</button>
-                </div>
-                <div class="plan">
-                    <h3>Plan Premium</h3>
-                    <p>Velocidad: 200 Mbps</p>
-                    <p>Precio: S/ 120.00</p>
-                    <button onclick="editPlan(this)">Editar</button>
-                </div>
-            </div>
-            <div class="actions">
-                <button onclick="addPlan()">Agregar Plan</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.min.js"></script>
-    <script>
-        let selectedClient = null;
-        let showingCancelados = false; // Control para alternar entre cancelados y lista principal
-
-        function showSection(section) {
-            const sections = document.querySelectorAll('.content > div');
-            sections.forEach(sec => sec.style.display = 'none');
-            const sectionToShow = document.getElementById(section);
-            if (sectionToShow) {
-                sectionToShow.style.display = 'block';
-            }
-        }
-
-        function searchByName() {
-            const input = document.getElementById("searchBox").value.toLowerCase();
-            const rows = document.querySelectorAll("#subscriptionTable tbody tr");
-
-            rows.forEach(row => {
-                const name = row.cells[0].textContent.toLowerCase();
-                row.style.display = name.includes(input) ? "" : "none";
-            });
-        }
-
-        function calculateRemainingTime() {
-            const rows = document.querySelectorAll('#subscriptionTable tbody tr');
-            rows.forEach(row => {
-                const endDate = row.querySelector('.remaining-time')?.getAttribute('data-end-date');
-                if (!endDate) return;
-                const end = new Date(endDate);
-                const now = new Date();
-                const daysRemaining = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
-                row.querySelector('.remaining-time').textContent = `${daysRemaining} días restantes`;
-            });
-        }
-
-        function selectRow(row) {
-            document.querySelectorAll("#subscriptionTable tbody tr").forEach(r => r.classList.remove("selected"));
-            row.classList.add("selected");
-            selectedClient = row;
-        }
-
-        function printTable() {
-            printJS({
-                printable: 'subscriptionTable',
-                type: 'html',
-                targetStyles: ['*']
-            });
-        }
-
-        function toggleCancelados() {
-            const rows = document.querySelectorAll('#subscriptionTable tbody tr');
-            const button = document.getElementById('toggleCancelButton');
-            showingCancelados = !showingCancelados;
-
-            rows.forEach(row => {
-                const status = row.cells[4].textContent.trim();
-                row.style.display = showingCancelados
-                    ? (status === 'Cancelado' ? '' : 'none')
-                    : (status !== 'Cancelado' ? '' : 'none');
-            });
-
-            button.textContent = showingCancelados ? "Regresar" : "Ver Cancelados";
-        }
-
-        function addPlan() {
-            const planContainer = document.getElementById("plansContainer");
-            const newPlan = document.createElement('div');
-            newPlan.classList.add('plan');
-            newPlan.innerHTML = `
-                <h3>Nuevo Plan</h3>
-                <p>Velocidad: 0 Mbps</p>
-                <p>Precio: S/ 0.00</p>
-                <button onclick="editPlan(this)">Editar</button>
-            `;
-            planContainer.appendChild(newPlan);
-        }
-
-        function editPlan(button) {
-            const plan = button.closest('.plan');
-            const planName = plan.querySelector('h3');
-            const planSpeed = plan.querySelector('p:first-of-type');
-            const planPrice = plan.querySelector('p:nth-of-type(2)');
-
-            const newName = prompt("Editar nombre del plan:", planName.textContent);
-            const newSpeed = prompt("Editar velocidad del plan (Mbps):", planSpeed.textContent.split(': ')[1]);
-            const newPrice = prompt("Editar precio del plan (S/):", planPrice.textContent.split(': ')[1]);
-
-            if (newName) planName.textContent = newName;
-            if (newSpeed) planSpeed.textContent = `Velocidad: ${newSpeed} Mbps`;
-            if (newPrice) planPrice.textContent = `Precio: S/ ${newPrice}`;
-        }
-
-        function modifySubscription() {
-            if (!selectedClient) return;
-
-            const clientName = selectedClient.cells[0].textContent;
-            const currentStatusCell = selectedClient.cells[4];
-            const currentStatus = currentStatusCell.textContent.trim();
-
-            if (currentStatus === 'Activo') {
-                currentStatusCell.textContent = 'Inactivo';
-                alert(`${clientName} ahora está inactivo.`);
-            } else if (currentStatus === 'Inactivo') {
-                currentStatusCell.textContent = 'Activo';
-                alert(`${clientName} ahora está activo.`);
-            } else if (currentStatus === 'Cancelado') {
-                currentStatusCell.textContent = 'Activo';
-                alert(`${clientName} ha sido reactivado. Recuerda que la reconexión tiene un costo.`);
-            }
-        }
-
-        function deleteSubscription() {
-            if (!selectedClient) return;
-
-            const clientName = selectedClient.cells[0].textContent;
-            const currentStatusCell = selectedClient.cells[4];
-            const currentStatus = currentStatusCell.textContent.trim();
-
-            if (currentStatus === 'Cancelado') {
-                alert(`${clientName} ya está cancelado.`);
-                return;
-            }
-
-            if (confirm(`¿Estás seguro de que quieres cancelar a ${clientName}?`)) {
-                currentStatusCell.textContent = 'Cancelado';
-                alert(`${clientName} ha sido cancelado.`);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', calculateRemainingTime);
-    </script>
 </body>
 </html>
