@@ -5,144 +5,210 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - MINTER</title>
   <style>
+    /* General styles */
     body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  display: flex;
-  height: 100vh;
-}
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffffff, #e0e0e0);
+      animation: bg-color 5s infinite alternate;
+    }
 
-.container {
-  display: flex;
-  width: 100%;
-}
+    @keyframes bg-color {
+      from {
+        background-color: #ffffff;
+      }
+      to {
+        background-color: #f4f4f4;
+      }
+    }
 
-.left-panel {
-  background-color: #f4f4f4;
-  flex: 1;
-  text-align: center;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+    .container {
+      display: flex;
+      width: 100%;
+    }
 
-.logo {
-  width: 100px;
-  height: 100px;
-}
+    .left-panel {
+      flex: 1;
+      text-align: center;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      animation: slide-left 1s ease-in-out;
+    }
 
-.left-panel h1 {
-  font-size: 2em;
-  margin: 10px 0;
-}
+    @keyframes slide-left {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
 
-.left-panel p {
-  font-size: 1em;
-  color: #555;
-}
+    .logo {
+      width: 100px;
+      height: 100px;
+      animation: rotate-logo 2s infinite linear;
+    }
 
-.right-panel {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
+    @keyframes rotate-logo {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-.right-panel h2 {
-  margin-bottom: 20px;
-  font-size: 1.5em;
-}
+    .fade-in {
+      animation: fade-in 1.5s ease-in-out;
+    }
 
-.input-group {
-  margin-bottom: 15px;
-  width: 100%;
-}
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.input-group label {
-  display: block;
-  font-size: 0.9em;
-  margin-bottom: 5px;
-}
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-.input-group input {
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+    .right-panel h2 {
+      margin-bottom: 20px;
+      font-size: 1.5em;
+      animation: fade-in 1s ease-in-out;
+    }
 
-.remember-me {
-  margin-bottom: 20px;
-  font-size: 0.9em;
-  display: flex;
-  align-items: center;
-}
+    .input-group {
+      margin-bottom: 15px;
+      width: 100%;
+    }
 
-.remember-me input {
-  margin-right: 5px;
-}
+    .input-group label {
+      display: block;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+    }
 
-button {
-  background-color: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 1em;
-  cursor: pointer;
-  border-radius: 5px;
-}
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
 
-button:hover {
-  background-color: #555;
-}
+    .input-group input:focus {
+      box-shadow: 0px 0px 10px rgba(0, 123, 255, 0.7);
+      transform: scale(1.05);
+    }
 
+    .remember-me {
+      margin-bottom: 20px;
+      font-size: 0.9em;
+      display: flex;
+      align-items: center;
+    }
+
+    .remember-me input {
+      margin-right: 5px;
+    }
+
+    .btn-animate {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      animation: pulse 1.5s infinite;
+    }
+
+    .btn-animate:hover {
+      background-color: #555;
+      transform: scale(1.1);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes fade-out {
+      to {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="left-panel">
       <img src="logo.png" alt="MINTER Logo" class="logo">
-      <h1>MINTER</h1>
-      <p>EMPRESA PERUANA / 20 AÑOS SUMANDO MEJORES REDES</p>
+      <h1 class="fade-in">MINTER</h1>
+      <p class="slide-in">EMPRESA PERUANA / 20 AÑOS SUMANDO MEJORES REDES</p>
     </div>
     <div class="right-panel">
-      <h2>LOGIN</h2>
+      <h2 class="fade-in">LOGIN</h2>
       <form id="loginForm">
-        <div class="input-group">
+        <div class="input-group fade-in">
           <label for="username">Username</label>
           <input type="text" id="username" name="username" required>
         </div>
-        <div class="input-group">
+        <div class="input-group fade-in">
           <label for="password">Password</label>
           <input type="password" id="password" name="password" required>
         </div>
-        <div class="remember-me">
+        <div class="remember-me fade-in">
           <input type="checkbox" id="rememberMe" name="rememberMe">
           <label for="rememberMe">Remember me</label>
         </div>
-        <button type="submit">SIGN IN</button>
+        <button type="submit" class="btn-animate">SIGN IN</button>
       </form>
     </div>
   </div>
   <script>
     document.getElementById('loginForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
+      e.preventDefault();
 
-  if (username === 'admin' && password === '123456') {
-    window.location.href = 'Inicio.html';
-  } else {
-    alert('Invalid username or password');
-  }
-});
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
 
+      // Validación
+      if (username === 'admin' && password === '123456') {
+        document.body.style.animation = "fade-out 1s forwards";
+        setTimeout(() => {
+          window.location.href = 'Inicio.html';
+        }, 1000);
+      } else {
+        alert('Invalid username or password');
+      }
+    });
   </script>
 </body>
 </html>
