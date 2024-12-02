@@ -36,7 +36,25 @@ if ($result->num_rows > 0) {
             VALUES ('$dni', '$nombres', '$apellidos', '$correo', '$direccion', '$telefono')";
 
     if ($conn->query($sql) === TRUE) {
-        echo json_encode(["status" => "success", "message" => "Cliente agregado exitosamente"]);
+        // Obtener el ID del cliente recién insertado
+        $cliente_id = $conn->insert_id;
+
+        // Valores predeterminados para suscripciones
+        $recepcionista_id = 1; // Cambia este valor según corresponda
+        $plan_id = 1; // ID del plan predeterminado
+        $descuento_id = 1; // ID del descuento predeterminado
+        $meses = 1; // Cantidad de meses predeterminada
+        $fecha_registro = date("Y-m-d H:i:s");
+
+        // Insertar en la tabla Suscripciones
+        $sql_suscripcion = "INSERT INTO Suscripciones (ClienteID, RecepcionistaID, PlanID, DescuentoID, CantidadMeses, FechaRegistro)
+                            VALUES ('$cliente_id', '$recepcionista_id', '$plan_id', '$descuento_id', '$meses', '$fecha_registro')";
+
+        if ($conn->query($sql_suscripcion) === TRUE) {
+            echo json_encode(["status" => "success", "message" => "Cliente y suscripción agregados exitosamente"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Cliente agregado, pero error al crear suscripción: " . $conn->error]);
+        }
     } else {
         echo json_encode(["status" => "error", "message" => "Error al agregar cliente: " . $conn->error]);
     }
