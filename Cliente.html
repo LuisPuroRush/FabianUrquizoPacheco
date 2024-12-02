@@ -331,17 +331,11 @@ btnGuardar.addEventListener('click', (event) => {
         <td>${cliente.plan}</td>
         <td>${cliente.meses}</td>
     `;
-
-    // Añadir fila a la tabla
     tablaClientes.appendChild(fila);
-
-    // Limpiar formulario
     form.reset();
 
     alert('Cliente guardado con éxito.');
 });
-
-// Evento para eliminar clientes seleccionados
 btnEliminar.addEventListener('click', () => {
     const filas = tablaClientes.querySelectorAll('tr');
     if (filas.length === 0) {
@@ -354,8 +348,6 @@ btnEliminar.addEventListener('click', () => {
 
     alert('Último cliente eliminado.');
 });
-
-// Funcionalidad para buscar clientes en la tabla
 const buscador = document.querySelector('.buscador input');
 buscador.addEventListener('input', () => {
     const texto = buscador.value.toLowerCase();
@@ -370,8 +362,6 @@ buscador.addEventListener('input', () => {
         fila.style.display = coincide ? '' : 'none';
     });
 });
-
-// Animación para enlaces del menú lateral
 const enlacesMenu = document.querySelectorAll('.menu-lateral a');
 enlacesMenu.forEach((enlace) => {
     enlace.addEventListener('mouseenter', () => {

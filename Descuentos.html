@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Lateral - Descuentos</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            display: flex;
+        }
+
+        /* Menú lateral */
+        .menu-lateral {
+            width: 250px;
+            height: 100vh;
+            background-color: #fff;
+            border-right: 2px solid #ddd;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-lateral img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            align-self: center;
+            margin-bottom: 10px;
+        }
+
+        .menu-lateral h1 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            align-self: center;
+            margin: 10px 0;
+        }
+
+        .menu-lateral .bienvenidos {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            align-self: center;
+            margin: 20px 0;
+        }
+
+        .menu-lateral .linea {
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+            margin: 10px 0;
+        }
+
+        .menu-lateral h2 {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            color: #666;
+        }
+
+        .menu-lateral a {
+            width: 100%;
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+            padding: 12px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+        }
+
+        .menu-lateral a:hover {
+            background-color: #007bff;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .menu-lateral a.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .menu-lateral a.cerrar-sesion {
+            color: #d9534f;
+            font-weight: bold;
+        }
+
+        .menu-lateral a.cerrar-sesion:hover {
+            background-color: #ffecec;
+            color: #b52b27;
+        }
+
+        /* Contenido principal */
+        .contenido {
+            margin-left: 300px;
+            padding: 20px;
+            width: calc(100% - 300px);
+        }
+
+        .formulario-descuento {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .formulario-descuento input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .formulario-descuento button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .formulario-descuento button:hover {
+            background-color: #0056b3;
+        }
+
+        .contenedor-descuentos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .descuento {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .descuento h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .descuento p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .botones {
+            margin-top: 10px;
+        }
+
+        .botones button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .botones .editar {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .botones .eliminar {
+            background-color: #dc3545;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-lateral">
+        <img src="logo.png" alt="Logo">
+        <div class="bienvenidos">Bienvenidos</div>
+        <div class="linea"></div>
+        <h1>EMPRESA PERUANA / 20 AÑOS</h1>
+
+        <h2>Mantenimiento</h2>
+        <a href="Suscripciones.html">Suscripciones</a>
+        <a href="Planes.html">Planes</a>
+        <a href="Descuentos.html" class="active">Descuentos</a>
+
+        <h2>Soporte</h2>
+        <a href="Cliente.html">Cliente</a>
+
+        <a href="index.html" class="cerrar-sesion">Cerrar Sesión</a>
+    </div>
+
+    <div class="contenido">
+        <h1>Gestión de Descuentos</h1>
+        <form class="formulario-descuento" onsubmit="return agregarDescuento()">
+            <input type="text" id="nombre-descuento" placeholder="Nombre del descuento" required>
+            <input type="text" id="descripcion-descuento" placeholder="Descripción" required>
+            <input type="number" id="porcentaje-descuento" placeholder="Porcentaje" required min="1" max="100">
+            <button type="submit">Agregar Descuento</button>
+        </form>
+
+        <div class="contenedor-descuentos" id="contenedor-descuentos">
+            <!-- Los descuentos se generarán aquí dinámicamente -->
+        </div>
+    </div>
+
+    <script>
+        function agregarDescuento() {
+            const nombre = document.getElementById("nombre-descuento").value.trim();
+            const descripcion = document.getElementById("descripcion-descuento").value.trim();
+            const porcentaje = document.getElementById("porcentaje-descuento").value.trim();
+
+            if (!nombre || !descripcion || !porcentaje) {
+                alert("Por favor, llena todos los campos.");
+                return false;
+            }
+
+            const contenedor = document.getElementById("contenedor-descuentos");
+
+            const descuentoDiv = document.createElement("div");
+            descuentoDiv.classList.add("descuento");
+
+            descuentoDiv.innerHTML = `
+                <h3>${nombre}</h3>
+                <p>${descripcion}</p>
+                <p><strong>${porcentaje}%</strong></p>
+                <div class="botones">
+                    <button class="editar" onclick="editarDescuento(this)">Editar</button>
+                    <button class="eliminar" onclick="eliminarDescuento(this)">Eliminar</button>
+                </div>
+            `;
+
+            contenedor.appendChild(descuentoDiv);
+
+            // Limpiar campos
+            document.getElementById("nombre-descuento").value = "";
+            document.getElementById("descripcion-descuento").value = "";
+            document.getElementById("porcentaje-descuento").value = "";
+
+            return false; // Evitar recargar la página
+        }
+
+        function editarDescuento(btn) {
+            const descuentoDiv = btn.parentElement.parentElement;
+            const nombre = prompt("Editar nombre del descuento:", descuentoDiv.querySelector("h3").innerText);
+            const descripcion = prompt("Editar descripción:", descuentoDiv.querySelectorAll("p")[0].innerText);
+            const porcentaje = prompt("Editar porcentaje:", descuentoDiv.querySelectorAll("p")[1].innerText.replace("%", "").trim());
+
+            if (nombre && descripcion && porcentaje) {
+                descuentoDiv.querySelector("h3").innerText = nombre;
+                descuentoDiv.querySelectorAll("p")[0].innerText = descripcion;
+                descuentoDiv.querySelectorAll("p")[1].innerHTML = `<strong>${porcentaje}%</strong>`;
+            }
+        }
+
+        function eliminarDescuento(btn) {
+            if (confirm("¿Seguro que deseas eliminar este descuento?")) {
+                btn.parentElement.parentElement.remove();
+            }
+        }
+    </script>
+</body>
+</html>
