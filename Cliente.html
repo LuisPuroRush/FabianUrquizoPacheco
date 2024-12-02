@@ -3,375 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes</title>
+    <title>Gestión de Clientes</title>
     <style>
         body {
             margin: 0;
             font-family: 'Arial', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f8f8f8;
+            display: flex;
         }
 
         .menu-lateral {
             width: 250px;
             height: 100vh;
-            background-color: #ffffff;
-            border-right: 1px solid #e5e7eb;
+            background-color: #fff;
+            border-right: 2px solid #ddd;
             position: fixed;
             top: 0;
             left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             padding: 20px;
-            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 3px 0 8px rgba(0, 0, 0, 0.15);
         }
 
         .menu-lateral img {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            display: block;
-            margin: 0 auto 10px;
-            transition: transform 0.3s ease;
+            align-self: center;
+            margin-bottom: 10px;
         }
 
-        .menu-lateral img:hover {
-            transform: scale(1.1);
-        }
-
-        .menu-lateral .bienvenidos {
-            font-size: 20px;
-            font-weight: bold;
-            color: #1f2937;
-            text-align: center;
-            margin: 15px 0;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-
-        .menu-lateral .bienvenidos:hover {
-            opacity: 1;
-        }
-
-        .menu-lateral .linea {
-            width: 100%;
-            height: 1px;
-            background-color: #e5e7eb;
-            margin: 15px 0;
-        }
-
-        .menu-lateral h1 {
-            font-size: 16px;
-            font-weight: bold;
-            color: #374151;
-            text-align: center;
-            margin-bottom: 15px;
-            transition: color 0.3s ease;
-        }
-
-        .menu-lateral h1:hover {
-            color: #1d4ed8;
-        }
-
-        .menu-lateral h2 {
+        .menu-lateral h1, .menu-lateral h2 {
             font-size: 14px;
             font-weight: bold;
-            margin: 20px 0 10px 0;
-            color: #6b7280;
-            transition: color 0.3s ease;
-        }
-
-        .menu-lateral h2:hover {
-            color: #1d4ed8;
+            margin: 10px 0;
+            color: #333;
         }
 
         .menu-lateral a {
-            display: block;
+            width: 100%;
             text-decoration: none;
-            color: #374151;
-            font-size: 14px;
-            padding: 10px 15px;
+            color: #333;
+            font-size: 15px;
+            padding: 12px 15px;
             border-radius: 5px;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
         }
 
-        .menu-lateral a.active, .menu-lateral a:hover {
-            background-color: #1d4ed8;
-            color: #ffffff;
+        .menu-lateral a:hover {
+            background-color: #007bff;
+            color: #fff;
             transform: scale(1.05);
         }
 
-        .menu-lateral a.cerrar-sesion {
-            color: #dc2626;
+        .menu-lateral a.active {
+            background-color: #007bff;
+            color: white;
             font-weight: bold;
-            transition: all 0.3s ease;
         }
 
-        .menu-lateral a.cerrar-sesion:hover {
-            background-color: #fee2e2;
-            color: #991b1b;
-            transform: scale(1.05);
+        .contenido-principal {
+            padding-left: 270px;
+            padding-right: 20px;
+            padding-top: 20px;
+            width: 100%;
         }
 
-        .contenido {
-            margin-left: 270px;
-            padding: 20px;
-        }
-
-        .titulo-seccion {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1f2937;
+        h1 {
+            text-align: center;
             margin-bottom: 20px;
         }
 
-        .buscador input {
-            width: 300px;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-        }
-
-        .formulario {
+        form {
+            max-width: 600px;
+            margin: 20px auto;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 30px;
         }
 
-        .formulario label {
+        label {
             font-weight: bold;
-            color: #374151;
-            text-align: right;
+            margin: 5px 0;
         }
 
-        .formulario input, .formulario select {
-            padding: 10px;
+        input {
+            padding: 8px;
             font-size: 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
         }
 
-        .formulario .botones {
-            grid-column: span 4;
+        .btn-container {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-guardar {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-guardar:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+
+        .btn-eliminar {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-eliminar:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+        .btn-cancelados {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-cancelados:hover {
+            background-color: #138496;
+            transform: scale(1.05);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-container-extendido {
             display: flex;
             justify-content: flex-end;
-            gap: 15px;
         }
 
-        .formulario button {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .formulario .btn-guardar {
-            background-color: #22c55e;
-        }
-
-        .formulario .btn-guardar:hover {
-            background-color: #16a34a;
-        }
-
-        .formulario .btn-eliminar {
-            background-color: #ef4444;
-        }
-
-        .formulario .btn-eliminar:hover {
-            background-color: #dc2626;
-        }
-
-        .tabla-clientes table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .tabla-clientes th, .tabla-clientes td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #e5e7eb;
-        }
-
-        .tabla-clientes th {
-            background-color: #1d4ed8;
-            color: #ffffff;
-        }
-
-        .tabla-clientes tr:hover {
-            background-color: #f1f5f9;
-        }
     </style>
 </head>
 <body>
     <div class="menu-lateral">
         <img src="logo.png" alt="Logo">
-        <div class="bienvenidos">Bienvenidos</div>
-        <div class="linea"></div>
-        <h1>EMPRESA PERUANA / 20 AÑOS</h1>
+        <h1>EMPRESA PERUANA</h1>
         <h2>Mantenimiento</h2>
         <a href="Suscripciones.html">Suscripciones</a>
-        <a href="Clientes.html" class="active">Clientes</a>
         <a href="Planes.html">Planes</a>
         <a href="Descuentos.html">Descuentos</a>
         <h2>Soporte</h2>
+        <a href="Cliente.html" class="active">Cliente</a>
         <a href="index.html" class="cerrar-sesion">Cerrar Sesión</a>
     </div>
 
-    <div class="contenido">
-        <div class="titulo-seccion">Clientes</div>
-        <div class="buscador">
-            <input type="text" placeholder="Buscar cliente...">
-        </div>
-        <form class="formulario">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" placeholder="Nombre">
-            <label for="apellidos">Apellidos</label>
-            <input type="text" id="apellidos" placeholder="Apellidos">
-            <label for="telefono">Teléfono</label>
-            <input type="text" id="telefono" placeholder="Teléfono">
-            <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" placeholder="Dirección">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Email">
-            <label for="plan">Plan</label>
-            <select id="plan">
-                <option value="basic">Básico</option>
-                <option value="premium">Premium</option>
-                <option value="pro">Pro</option>
-            </select>
-            <label for="meses">Meses</label>
-            <select id="meses">
-                <option value="1">1 Mes</option>
-                <option value="3">3 Meses</option>
-                <option value="6">6 Meses</option>
-                <option value="12">12 Meses</option>
-            </select>
-            <div class="botones">
-                <button type="submit" class="btn-guardar">Guardar</button>
-                <button type="button" class="btn-eliminar">Eliminar</button>
+    <div class="contenido-principal">
+        <h1 id="titulo-principal">Gestión de Clientes</h1>
+        <form id="form-cliente">
+            <label for="cliente-id">ID Cliente (para cancelar):</label>
+            <input type="text" id="cliente-id" name="cliente-id" placeholder="Ingrese el ID">
+
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" name="dni" placeholder="Ingrese el DNI" maxlength="8">
+
+            <label for="nombres">Nombres:</label>
+            <input type="text" id="nombres" name="nombres" placeholder="Ingrese los nombres">
+
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" placeholder="Ingrese los apellidos">
+
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" name="correo" placeholder="Ingrese el correo">
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" placeholder="Ingrese la dirección">
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" placeholder="Ingrese el teléfono" maxlength="9">
+
+            <div class="btn-container">
+                <button type="button" class="btn btn-guardar" onclick="guardarCliente()">Guardar</button>
+                <button type="button" class="btn btn-eliminar" onclick="cancelarCliente()">Cancelar</button>
             </div>
         </form>
-        <div class="tabla-clientes">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Apellidos</th>
-                        <th>Teléfono</th>
-                        <th>Dirección</th>
-                        <th>Email</th>
-                        <th>Plan</th>
-                        <th>Meses</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Juan</td>
-                        <td>Pérez</td>
-                        <td>123456</td>
-                        <td>Av. Principal</td>
-                        <td>juanperez@example.com</td>
-                        <td>Premium</td>
-                        <td>12</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>María</td>
-                        <td>López</td>
-                        <td>987654</td>
-                        <td>Av. Los Rosales</td>
-                        <td>marialopez@example.com</td>
-                        <td>Pro</td>
-                        <td>6</td>
-                    </tr>
-                </tbody>
-            </table>
+
+        <div class="btn-container-extendido">
+            <button class="btn btn-cancelados" onclick="verCancelados()">Ver Cancelados</button>
         </div>
+
+        <div id="tabla-clientes">Cargando datos...</div>
     </div>
+
     <script>
-        // Selección de elementos
-const form = document.querySelector('.formulario');
-const tablaClientes = document.querySelector('.tabla-clientes tbody');
-const btnGuardar = document.querySelector('.btn-guardar');
-const btnEliminar = document.querySelector('.btn-eliminar');
-const inputs = form.querySelectorAll('input, select');
+        const cargarClientes = () => {
+            fetch('Clientes.php')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('tabla-clientes').innerHTML = data;
+                })
+                .catch(error => {
+                    document.getElementById('tabla-clientes').innerHTML = "Error al cargar los datos.";
+                    console.error(error);
+                });
+        };
 
-// Evento para guardar un cliente
-btnGuardar.addEventListener('click', (event) => {
-    event.preventDefault();
+        const guardarCliente = () => {
+            const datos = new FormData(document.getElementById('form-cliente'));
 
-    // Recopilar datos del formulario
-    const cliente = {};
-    inputs.forEach((input) => {
-        cliente[input.id] = input.value.trim();
-    });
+            fetch('AgregarCliente.php', {
+                method: 'POST',
+                body: datos
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") {
+                    document.getElementById('form-cliente').reset();
+                    cargarClientes();
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        };
 
-    // Validación simple
-    if (!cliente.nombre || !cliente.apellidos) {
-        alert('Por favor, complete los campos obligatorios.');
-        return;
-    }
+        const cancelarCliente = () => {
+            const clienteId = document.getElementById('cliente-id').value;
+            if (clienteId) {
+                fetch('CancelarCliente.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `cliente-id=${clienteId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    cargarClientes();
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('Debe ingresar un ID para cancelar.');
+            }
+        };
 
-    // Crear una nueva fila en la tabla
-    const fila = document.createElement('tr');
-    fila.innerHTML = `
-        <td>${tablaClientes.rows.length + 1}</td>
-        <td>${cliente.nombre}</td>
-        <td>${cliente.apellidos}</td>
-        <td>${cliente.telefono || '-'}</td>
-        <td>${cliente.direccion || '-'}</td>
-        <td>${cliente.email || '-'}</td>
-        <td>${cliente.plan}</td>
-        <td>${cliente.meses}</td>
-    `;
-    tablaClientes.appendChild(fila);
-    form.reset();
+        const verCancelados = () => {
+            document.getElementById('titulo-principal').textContent = "Clientes Cancelados";
+            document.getElementById('form-cliente').style.display = "none";
+            document.querySelector(".btn-container").style.display = "none";
 
-    alert('Cliente guardado con éxito.');
-});
-btnEliminar.addEventListener('click', () => {
-    const filas = tablaClientes.querySelectorAll('tr');
-    if (filas.length === 0) {
-        alert('No hay clientes para eliminar.');
-        return;
-    }
+            const btnVolver = document.createElement("button");
+            btnVolver.className = "btn btn-cancelados";
+            btnVolver.textContent = "Regresar";
+            btnVolver.onclick = () => location.reload();
 
-    // Eliminar la última fila como ejemplo
-    tablaClientes.removeChild(filas[filas.length - 1]);
+            fetch('Cancelados.php')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('tabla-clientes').innerHTML = data;
+                    document.getElementById('tabla-clientes').appendChild(btnVolver);
+                })
+                .catch(error => {
+                    document.getElementById('tabla-clientes').innerHTML = "Error al cargar los datos.";
+                    console.error(error);
+                });
+        };
 
-    alert('Último cliente eliminado.');
-});
-const buscador = document.querySelector('.buscador input');
-buscador.addEventListener('input', () => {
-    const texto = buscador.value.toLowerCase();
-    const filas = tablaClientes.querySelectorAll('tr');
-
-    filas.forEach((fila) => {
-        const celdas = fila.querySelectorAll('td');
-        const coincide = Array.from(celdas).some((celda) =>
-            celda.textContent.toLowerCase().includes(texto)
-        );
-
-        fila.style.display = coincide ? '' : 'none';
-    });
-});
-const enlacesMenu = document.querySelectorAll('.menu-lateral a');
-enlacesMenu.forEach((enlace) => {
-    enlace.addEventListener('mouseenter', () => {
-        enlace.style.transform = 'scale(1.1)';
-    });
-    enlace.addEventListener('mouseleave', () => {
-        enlace.style.transform = 'scale(1)';
-    });
-});
-
+        // Cargar tabla al inicio
+        window.onload = cargarClientes;
     </script>
 </body>
 </html>

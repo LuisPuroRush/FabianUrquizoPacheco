@@ -195,18 +195,36 @@
   <script>
     document.getElementById('loginForm').addEventListener('submit', function (e) {
       e.preventDefault();
-
+  
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
-      if (username === 'admin' && password === '123456') {
-        document.body.style.animation = "fade-out 1s forwards";
-        setTimeout(() => {
-          window.location.href = 'Inicio.html';
-        }, 1000);
-      } else {
-        alert('Invalid username or password');
-      }
+  
+      fetch('index.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          username: username,
+          password: password,
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          document.body.style.animation = "fade-out 1s forwards";
+          setTimeout(() => {
+            window.location.href = 'Inicio.html';
+          }, 1000);
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     });
   </script>
+  
 </body>
 </html>
